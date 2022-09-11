@@ -1,0 +1,12 @@
+.App{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.img-compo{
+  /* height: calc(40vh +calc(calc(1vh/1vw)*10px)); */
+  height: 60vh;
+  width: 100%;
+}
