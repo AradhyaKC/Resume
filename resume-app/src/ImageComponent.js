@@ -1,12 +1,48 @@
 /* eslint-disable jsx-a11y/alt-text */
 import "./ImageComponent.css"
-import { useEffect, useRef, useState } from "react";
+import secondMountains from "./SecondMountains.avif";
+import tempImage from "./SimpleImage.jpg";
+
+import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
 
 function ImageComponent(props){
 
+    var stickyRef= useRef(undefined);
+
+    return (
+        <div className="image-compo">
+            <div className="bgm"></div>
+            <div className="bgm-1"></div>
+            <img className="image"></img>
+            <img className="image-1"></img>
+            
+            <button onClick={()=>{
+                stickyRef.current.setActiveImageUrlAndSwipe(tempImage,true)}}> Next </button>
+            <StickyImageComponent ref={stickyRef}/>
+        </div>
+    );
+}
+
+const StickyImageComponent= forwardRef((props,ref)=>{
+
     const [stickyState,setStickyState] = useState({
         scrolled:false, isStickyImgEnabled:false,stickyImgSlideClass:"",stickyImg1SlideClass:"",
+        activeImgUrl:secondMountains, inactiveImgUrl:secondMountains,
     });
+
+    useImperativeHandle(ref,()=>{
+        return {setActiveImageUrlAndSwipe};
+    });
+
+    const setActiveImageUrlAndSwipe=(urlString,swipedLeft)=>{
+        setStickyState((prevState)=>{
+            var newState = {...prevState};
+            newState.inactiveImgUrl=newState.activeImgUrl;
+            newState.activeImgUrl=urlString;
+            return newState;
+        });
+        handleSwipe(swipedLeft);
+    }
 
     const handleScroll=() => {
         const offset=window.scrollY;
@@ -30,7 +66,6 @@ function ImageComponent(props){
         });
     }
     const handleSwipe=async (swipedLeft)=>{
-        console.log("handle Swipe called");
         await setStickyState((prevState)=>{
             var newState={...prevState};
             newState.isStickyImgEnabled=!prevState.isStickyImgEnabled;
@@ -77,27 +112,21 @@ function ImageComponent(props){
     });
 
 
-
-
     return (
-        <div className="image-compo">
-            <div className="bgm"></div>
-            <div className="bgm-1"></div>
-            <img className="image"></img>
-            <img className="image-1"></img>
-            <button onClick={()=>{handleSwipe(true);}}> Next </button>
-            <div className="sticky-bar">
+        <div className="sticky-bar">
                 <div className={stickyState.scrolled?"sticky-img-fade-in":""} style={{
                     width:'100%', height:`${stickyState.scrolled?'min-content':'100%'}`,display:`${(stickyState.scrolled)?"block":"none"}`,
                     position:`${stickyState.scrolled?"fixed":"absolute"}`,top:`${stickyState.scrolled?"0px":""}`
                 }}>
-                    <img className={"sticky-bar-img " + stickyState.stickyImgSlideClass}></img>
-                    <img className={"sticky-bar-img-1 " +stickyState.stickyImg1SlideClass}
-                    ></img>
+                    <img className={"sticky-bar-img " + stickyState.stickyImgSlideClass} style={{
+                        content:`url(${stickyState.isStickyImgEnabled?stickyState.activeImgUrl:stickyState.inactiveImgUrl})`
+                    }}></img>
+                    <img className={"sticky-bar-img-1 " +stickyState.stickyImg1SlideClass}  style={{
+                        content:`url(${!stickyState.isStickyImgEnabled?stickyState.activeImgUrl:stickyState.inactiveImgUrl})`
+                    }}></img>
                 </div>
-            </div>
         </div>
     );
-}
+});
 
 export default ImageComponent;

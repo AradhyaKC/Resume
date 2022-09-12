@@ -73,10 +73,10 @@
     position: absolute;
 }
 .sticky-bar-img{
-    content: url("./matej-rieciciar-SdDvoAvu384-unsplash\ cropped\ .jpg");
+    /* content: url("./matej-rieciciar-SdDvoAvu384-unsplash\ cropped\ .jpg"); */
 }
 .sticky-bar-img-1{
-    content: url("./SecondMountains.avif");
+    /* content: url("./SecondMountains.avif"); */
 }
 
 .sticky-img-left-slide-in{
