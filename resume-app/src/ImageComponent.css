@@ -1,6 +1,7 @@
 :root{
     --sticky-height:50px;
     --image-compo-height:75vh;
+    --sticky-slide-time:1s;
 }
 
 .image,.image-1{
@@ -26,7 +27,7 @@
 
 .image-1{
     content: url("./SecondMountains.avif");
-    animation-name: "img-left-slide-in";
+    animation-name: "img-right-slide-in";
     animation-duration: 1s;
     animation-timing-function: ease-in-out;
     animation-fill-mode: forwards;
@@ -60,14 +61,13 @@
 .sticky-bar{
     width: 100%;
     height: 100%;
-    /* background-color: red; */
     display: flex;
-    /* display: none; */
     align-items: flex-end;
 }
 .sticky-bar-img,.sticky-bar-img-1{
     width: 100%;
     height: var(--sticky-height);
+    left: 50%;
     transform:translate(-50%,0px);
     object-fit: cover;
     position: absolute;
@@ -76,33 +76,56 @@
     content: url("./matej-rieciciar-SdDvoAvu384-unsplash\ cropped\ .jpg");
 }
 .sticky-bar-img-1{
-    display: none;
     content: url("./SecondMountains.avif");
 }
 
 .sticky-img-left-slide-in{
     animation-name: img-left-slide-in;
-    animation-duration: 1s;
+    animation-duration: var(--sticky-slide-time);
+    animation-fill-mode: forwards;
+    animation-timing-function: ease-in;
+    display: block;
+}
+.sticky-img-left-slide-out{
+    animation-name: img-left-slide-out;
+    animation-duration: var(--sticky-slide-time);
     animation-fill-mode: forwards;
     animation-timing-function: ease-in;
 }
 .sticky-img-right-slide-in{
     animation-name: img-right-slide-in;
-    animation-duration: 1s;
+    animation-duration: var(--sticky-slide-time);
+    animation-fill-mode: forwards;
+    animation-timing-function: ease-in;
+    display: block;
+}
+.sticky-img-right-slide-out{
+    animation-name: img-right-slide-out;
+    animation-duration: var(--sticky-slide-time);
     animation-fill-mode: forwards;
     animation-timing-function: ease-in;
 }
 .sticky-img-fade-in{
     animation-name: backgroundAnim;
     animation-timing-function: ease-in-out;
-    animation-duration: 0.7s;
+    animation-duration: 0.4s;
     animation-fill-mode: forwards;
 }
 .sticky-img-fade-out{
     animation-name: backgroundAnim;
     animation-timing-function: ease-in-out;
     animation-duration: 0.7s;
-    animation-fill-mode: backwards;
+    /* animation-fill-mode: backwards; */
+    animation-direction: reverse;
+}
+.sticky-img-display-none{
+    display: none;
+}
+button{
+    position: fixed;
+    bottom:10px;
+    right: 10px;
+    font-size: 24px;
 }
 
 @keyframes backgroundAnim {
@@ -127,7 +150,7 @@
     }
 }
 
-@keyframes img-left-slide-in{
+@keyframes img-right-slide-in{
     from{
         left: 150%;
     }
@@ -135,17 +158,29 @@
         left: 50%;
     }
 }
-/* @keyframes sticky-img-left-slideAnim{
+@keyframes img-right-slide-out {
     from{
-        left: ;
+        left: 50%;
+    }to{
+        display: none;
+        left: 150%;
     }
-} */
+}
 
-@keyframes img-right-slide-in {
+@keyframes img-left-slide-in {
     from{
         left: -50%;
     }
     to{
         left: 50%;
+    }
+}
+@keyframes img-left-slide-out {
+    from{
+        left: 50%;
+    }
+    to{
+        display: none;
+        left: -50%;
     }
 }

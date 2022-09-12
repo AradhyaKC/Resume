@@ -1,11 +1,11 @@
 /* eslint-disable jsx-a11y/alt-text */
 import "./ImageComponent.css"
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 function ImageComponent(props){
 
     const [stickyState,setStickyState] = useState({
-        scrolled:false, isStickyImgEnabled:false
+        scrolled:false, isStickyImgEnabled:false,stickyImgSlideClass:"",stickyImg1SlideClass:"",
     });
 
     const handleScroll=() => {
@@ -15,7 +15,7 @@ function ImageComponent(props){
         tempVar=(tempVar*10) + Number.parseFloat(getComputedStyle(root).getPropertyValue("--image-compo-height").charAt(0));
         tempVar=tempVar *(window.innerHeight/100);
         tempVar=tempVar- Number.parseFloat(getComputedStyle(root).getPropertyValue("--sticky-height").slice(0,2));
-        
+
         if(offset > tempVar-10)
           setStickyState((prevState)=>{
             var newState = {...prevState};
@@ -27,13 +27,57 @@ function ImageComponent(props){
             var newState = {...prevState};
             newState.scrolled=false; 
             return newState;
-          });
-
+        });
+    }
+    const handleSwipe=async (swipedLeft)=>{
+        console.log("handle Swipe called");
+        await setStickyState((prevState)=>{
+            var newState={...prevState};
+            newState.isStickyImgEnabled=!prevState.isStickyImgEnabled;
+            if(newState.isStickyImgEnabled){
+                if(swipedLeft){
+                    newState.stickyImgSlideClass="sticky-img-right-slide-in";
+                    newState.stickyImg1SlideClass="sticky-img-left-slide-out"
+                }
+                else {
+                    newState.stickyImgSlideClass="sticky-img-left-slide-in";
+                    newState.stickyImg1SlideClass="sticky-img-right-slide-out"
+                }
+            }else{
+                if(swipedLeft){
+                    newState.stickyImg1SlideClass="sticky-img-right-slide-in";
+                    newState.stickyImgSlideClass="sticky-img-left-slide-out"
+                }
+                else{
+                    newState.stickyImg1SlideClass="sticky-img-left-slide-in";
+                    newState.stickyImgSlideClass="sticky-img-right-slide-out"
+                }
+            }
+            return newState;
+        });
+        const root = document.querySelector(":root");
+        setTimeout(()=>{
+            setStickyState((prevState)=>{
+                var newState={...prevState};
+                if(prevState.isStickyImgEnabled){
+                    newState.stickyImgSlideClass="";
+                    newState.stickyImg1SlideClass="sticky-img-display-none";
+                }
+                else{
+                    newState.stickyImg1SlideClass="";
+                    newState.stickyImgSlideClass="sticky-img-display-none";
+                }
+                return newState;
+            })
+        }, Number.parseFloat(getComputedStyle(root).getPropertyValue("--sticky-slide-time")[0]) *1000);
     }
     
-      useEffect(() => {
-        window.addEventListener('scroll',handleScroll)
-      });
+    useEffect(() => {
+        window.addEventListener('scroll',handleScroll);
+    });
+
+
+
 
     return (
         <div className="image-compo">
@@ -41,16 +85,16 @@ function ImageComponent(props){
             <div className="bgm-1"></div>
             <img className="image"></img>
             <img className="image-1"></img>
+            <button onClick={()=>{handleSwipe(true);}}> Next </button>
             <div className="sticky-bar">
-                <img className="sticky-bar-img" style={{
-                        display:`${(stickyState.scrolled && stickyState.isStickyImgEnabled)?"block":"none"}`,
-                        position:`${stickyState.scrolled?"fixed":"absolute"}`,top:`${stickyState.scrolled?"0px":""}`
-                    }}></img>
-                <img className={`sticky-bar-img-1 ${stickyState.isStickyImgEnabled?"":"sticky-img-left-slide-in"}`}
-                    style={{
-                        display:`${(stickyState.scrolled && !stickyState.isStickyImgEnabled)?"block":"none"}`,
-                        position:`${stickyState.scrolled?"fixed":"absolute"}`,top:`${stickyState.scrolled?"0px":""}`
-                    }}></img>
+                <div className={stickyState.scrolled?"sticky-img-fade-in":""} style={{
+                    width:'100%', height:`${stickyState.scrolled?'min-content':'100%'}`,display:`${(stickyState.scrolled)?"block":"none"}`,
+                    position:`${stickyState.scrolled?"fixed":"absolute"}`,top:`${stickyState.scrolled?"0px":""}`
+                }}>
+                    <img className={"sticky-bar-img " + stickyState.stickyImgSlideClass}></img>
+                    <img className={"sticky-bar-img-1 " +stickyState.stickyImg1SlideClass}
+                    ></img>
+                </div>
             </div>
         </div>
     );
