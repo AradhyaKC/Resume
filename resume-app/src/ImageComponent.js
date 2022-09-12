@@ -15,7 +15,6 @@ function ImageComponent(props){
             <div className="bgm-1"></div>
             <img className="image"></img>
             <img className="image-1"></img>
-            
             <button onClick={()=>{
                 stickyRef.current.setActiveImageUrlAndSwipe(tempImage,true)}}> Next </button>
             <StickyImageComponent ref={stickyRef}/>

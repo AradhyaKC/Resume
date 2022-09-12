@@ -26,7 +26,7 @@
 }
 
 .image-1{
-    content: url("./SecondMountains.avif");
+    content: url("./OrangeishMountains-cropped.jpg");
     animation-name: "img-right-slide-in";
     animation-duration: 1s;
     animation-timing-function: ease-in-out;
@@ -40,11 +40,11 @@
     background: linear-gradient(0deg,gray,gainsboro);
     z-index: -1;
 }
-.bgm-1{
+.bgm-1{ 
     height: 100%;
     width:100%;
     position: absolute;
-    background: linear-gradient(0deg,rgb(39, 39, 39),gray);
+    background: linear-gradient(0deg,rgb(191, 255, 205),rgb(255, 232, 184));
     z-index: -1;
     animation-name: backgroundAnim;
     animation-duration: 1s;
@@ -56,6 +56,7 @@
     position: relative;
     width: 100%;
     height: var(--image-compo-height);
+    overflow: hidden;
 }
 
 .sticky-bar{
