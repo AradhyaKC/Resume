@@ -4,8 +4,9 @@ import ImageComponent from './ImageComponent.js';
 function App() {
   return (
     <div className='App'>
-      <ImageComponent swipedLeft={true}/>
-      
+      <ImageComponent backgroundClass="testClass">
+        <h1>Hello </h1>
+      </ImageComponent>
       <div>
         
 

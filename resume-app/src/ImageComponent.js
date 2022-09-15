@@ -8,21 +8,30 @@ import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "re
 function ImageComponent(props){
 
     var stickyRef= useRef(undefined);
-    const [imageState,setImageState] = useState({
-        isImageActive:true, imageSlideClass:"",// both bgm and imag will use the same bool for active;   
-        bgmAnimClass:"", slideLeft:false, prevChildren:undefined,
+    const [imageState,setImageState] = useState(()=>{
+        var state ={
+            isImageActive:true, imageSlideClass:"",// both bgm and imag will use the same bool for active;   
+            prevbgmClass:"", currentbgmClass:"", swipedLeft:false, prevChildren:undefined,currentChildren:undefined
+        };
+        state.currentChildren=props.children;
+        return state;
     });
+
 
     useEffect(()=>{
         SwipedLeft(props.swipedLeft);
-    },[props.children, props.swipedLeft]);
+    },[props.children, props.swipedLeft, props.backgroundClass]);
     
     const SwipedLeft=(swipedLeft)=>{
         setImageState((prevState)=>{
             var newState = {...prevState};
-            newState.prevChildren=prevState.prevChildren;
+            newState.prevChildren=prevState.currentChildren;
+            newState.currentChildren=props.children;
             newState.isImageActive=!prevState.isImageActive;
             newState.swipedLeft=swipedLeft;
+
+            newState.prevbgmClass=newState.currentbgmClass;
+            newState.currentbgmClass=props.backgroundClass;
 
             if(newState.swipedLeft){
                 newState.imageSlideClass ="image-right-slide-in";
@@ -36,13 +45,22 @@ function ImageComponent(props){
     
     return (
         <div className="image-compo">
-            <div className={"bgm " +  (imageState.isImageActive?"":"")}></div>
-            <div className={"bgm-1 " + (!imageState.isImageActive?"bgm-fade-in":"bgm-fade-out")}></div>
+            <div className={"bgm " +  (imageState.isImageActive?imageState.currentbgmClass:imageState.prevbgmClass)}></div>
+            <div className={"bgm-1 " + (!imageState.isImageActive?"bgm-fade-in " +imageState.currentbgmClass:
+            " bgm-fade-out " +imageState.prevbgmClass)}></div>
             <div className={"image " +(imageState.isImageActive?imageState.imageSlideClass:"img-fade-out-anim") }>
                 <img src={secondMountains}/>   
+                <div className="children-container">
+                    {imageState.isImageActive && imageState.currentChildren}    
+                    {!imageState.isImageActive && imageState.prevChildren}
+                </div>
             </div>
             <div className={"image-1 " + (!imageState.isImageActive?imageState.imageSlideClass:"img-fade-out-anim")}>
-                <img src={tempImage}/>                
+                <img src={tempImage}/> 
+                <div className="children-container">
+                    {!imageState.isImageActive && imageState.currentChildren}
+                    {imageState.isImageActive && imageState.prevChildren}
+                </div>               
             </div>
             <button onClick={()=>{ SwipedLeft(true);
                 stickyRef.current.setActiveImageUrlAndSwipe(tempImage,true)}}> Next </button>

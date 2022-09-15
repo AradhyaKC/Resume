@@ -10,3 +10,7 @@
   height: 60vh;
   width: 100%;
 }
+
+.testClass{
+  background:linear-gradient(0deg,gray,gainsboro) !important ;
+}
