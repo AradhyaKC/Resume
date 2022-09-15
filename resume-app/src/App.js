@@ -4,7 +4,7 @@ import ImageComponent from './ImageComponent.js';
 function App() {
   return (
     <div className='App'>
-      <ImageComponent backgroundClass="testClass">
+      <ImageComponent  >
         <h1>Hello </h1>
       </ImageComponent>
       <div>

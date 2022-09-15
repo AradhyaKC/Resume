@@ -12,5 +12,5 @@
 }
 
 .testClass{
-  background:linear-gradient(0deg,gray,gainsboro) !important ;
+  background:linear-gradient(0deg,rgb(54, 54, 54),gray) !important ;
 }

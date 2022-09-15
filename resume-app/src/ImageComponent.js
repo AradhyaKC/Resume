@@ -10,7 +10,7 @@ function ImageComponent(props){
     var stickyRef= useRef(undefined);
     const [imageState,setImageState] = useState(()=>{
         var state ={
-            isImageActive:true, imageSlideClass:"",// both bgm and imag will use the same bool for active;   
+            isImageActive:true, imageSlideClass:"",inactiveImgAnim:"",// both bgm and imag will use the same bool for active;   
             prevbgmClass:"", currentbgmClass:"", swipedLeft:false, prevChildren:undefined,currentChildren:undefined
         };
         state.currentChildren=props.children;
@@ -28,15 +28,21 @@ function ImageComponent(props){
             newState.prevChildren=prevState.currentChildren;
             newState.currentChildren=props.children;
             newState.isImageActive=!prevState.isImageActive;
-            newState.swipedLeft=swipedLeft;
-
+            
             newState.prevbgmClass=newState.currentbgmClass;
             newState.currentbgmClass=props.backgroundClass;
+            newState.imageSlideClass="img-fade-in-anim";
+            newState.inactiveImgAnim="sticky-img-display-none";
 
-            if(newState.swipedLeft){
-                newState.imageSlideClass ="image-right-slide-in";
-            }else{
-                newState.imageSlideClass="image-left-slide-in";
+            if(swipedLeft!=""  && typeof swipedLeft =='boolean'){
+                newState.swipedLeft=swipedLeft;
+                if(newState.swipedLeft){
+                    newState.imageSlideClass ="image-right-slide-in";
+                    newState.inactiveImgAnim="img-fade-out-anim";
+                }else{
+                    newState.imageSlideClass="image-left-slide-in";
+                    newState.inactiveImgAnim="img=fade-out-anim";
+                }
             }
             return newState;
         });
@@ -44,18 +50,18 @@ function ImageComponent(props){
 
     
     return (
-        <div className="image-compo">
+        <header className="image-compo">
             <div className={"bgm " +  (imageState.isImageActive?imageState.currentbgmClass:imageState.prevbgmClass)}></div>
             <div className={"bgm-1 " + (!imageState.isImageActive?"bgm-fade-in " +imageState.currentbgmClass:
             " bgm-fade-out " +imageState.prevbgmClass)}></div>
-            <div className={"image " +(imageState.isImageActive?imageState.imageSlideClass:"img-fade-out-anim") }>
+            <div className={"image " +(imageState.isImageActive?imageState.imageSlideClass:imageState.inactiveImgAnim) }>
                 <img src={secondMountains}/>   
                 <div className="children-container">
                     {imageState.isImageActive && imageState.currentChildren}    
                     {!imageState.isImageActive && imageState.prevChildren}
                 </div>
             </div>
-            <div className={"image-1 " + (!imageState.isImageActive?imageState.imageSlideClass:"img-fade-out-anim")}>
+            <div className={"image-1 " + (!imageState.isImageActive?imageState.imageSlideClass:imageState.inactiveImgAnim)}>
                 <img src={tempImage}/> 
                 <div className="children-container">
                     {!imageState.isImageActive && imageState.currentChildren}
@@ -65,7 +71,7 @@ function ImageComponent(props){
             <button onClick={()=>{ SwipedLeft(true);
                 stickyRef.current.setActiveImageUrlAndSwipe(tempImage,true)}}> Next </button>
             <StickyImageComponent ref={stickyRef}/>
-        </div>
+        </header>
     );
 }
 
