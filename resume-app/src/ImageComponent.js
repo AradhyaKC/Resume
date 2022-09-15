@@ -1,21 +1,50 @@
 /* eslint-disable jsx-a11y/alt-text */
 import "./ImageComponent.css"
 import secondMountains from "./SecondMountains.avif";
-import tempImage from "./SimpleImage.jpg";
+import tempImage from "./matej-rieciciar-SdDvoAvu384-unsplash-medium-cropped.jpg";
 
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
 
 function ImageComponent(props){
 
     var stickyRef= useRef(undefined);
+    const [imageState,setImageState] = useState({
+        isImageActive:true, imageSlideClass:"",// both bgm and imag will use the same bool for active;   
+        bgmAnimClass:"", slideLeft:false, prevChildren:undefined,
+    });
 
+    useEffect(()=>{
+        SwipedLeft(props.swipedLeft);
+    },[props.children, props.swipedLeft]);
+    
+    const SwipedLeft=(swipedLeft)=>{
+        setImageState((prevState)=>{
+            var newState = {...prevState};
+            newState.prevChildren=prevState.prevChildren;
+            newState.isImageActive=!prevState.isImageActive;
+            newState.swipedLeft=swipedLeft;
+
+            if(newState.swipedLeft){
+                newState.imageSlideClass ="image-right-slide-in";
+            }else{
+                newState.imageSlideClass="image-left-slide-in";
+            }
+            return newState;
+        });
+    } 
+
+    
     return (
         <div className="image-compo">
-            <div className="bgm"></div>
-            <div className="bgm-1"></div>
-            <img className="image"></img>
-            <img className="image-1"></img>
-            <button onClick={()=>{
+            <div className={"bgm " +  (imageState.isImageActive?"":"")}></div>
+            <div className={"bgm-1 " + (!imageState.isImageActive?"bgm-fade-in":"bgm-fade-out")}></div>
+            <div className={"image " +(imageState.isImageActive?imageState.imageSlideClass:"img-fade-out-anim") }>
+                <img src={secondMountains}/>   
+            </div>
+            <div className={"image-1 " + (!imageState.isImageActive?imageState.imageSlideClass:"img-fade-out-anim")}>
+                <img src={tempImage}/>                
+            </div>
+            <button onClick={()=>{ SwipedLeft(true);
                 stickyRef.current.setActiveImageUrlAndSwipe(tempImage,true)}}> Next </button>
             <StickyImageComponent ref={stickyRef}/>
         </div>
