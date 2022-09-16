@@ -1,12 +1,16 @@
 import './App.css';
 import ImageComponent from './ImageComponent.js';
+import NavComponent from './NavComponent';
 
+
+// still need to make ImageComponent usable on larger screens and also picture tag srcset; 
 function App() {
   return (
     <div className='App'>
-      <ImageComponent  >
+      <ImageComponent >
         <h1>Hello </h1>
       </ImageComponent>
+      <NavComponent></NavComponent>
       <div>
         
 

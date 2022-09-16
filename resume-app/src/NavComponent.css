@@ -1,0 +1,12 @@
+.navbar{
+    display: flex;
+    flex-direction: row;
+    height: min-content;
+    justify-content: center;
+    background-color: white;
+    width: 100%;
+}
+
+.navbar>div{
+    margin: 5px 20px;
+}
