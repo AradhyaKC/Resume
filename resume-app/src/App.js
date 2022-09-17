@@ -5,12 +5,21 @@ import NavComponent from './NavComponent';
 
 // still need to make ImageComponent usable on larger screens and also picture tag srcset; 
 function App() {
+
+  const Calltest = (index)=>{
+    console.log(index);
+  }
+
   return (
     <div className='App'>
       <ImageComponent >
         <h1>Hello </h1>
       </ImageComponent>
-      <NavComponent></NavComponent>
+      <NavComponent callOnElementClick ={Calltest}>
+        <div>Hello World</div>
+        <div>Hello World</div>
+        <div>Hello World</div>
+      </NavComponent>
       <div>
         
 
