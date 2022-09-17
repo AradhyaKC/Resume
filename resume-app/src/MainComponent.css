@@ -1,0 +1,31 @@
+:root{
+    --no-of-pages:2;
+    --selectedPage:0;
+}
+.main-compo{
+    width: calc(100%);
+    overflow-x: hidden;
+    z-index: -2;
+}
+.page-container{
+    width: calc(var(--no-of-pages) * 100%);
+    display: flex;
+    flex-direction: row;
+    position: relative;
+    
+    left: calc(var(--selectedPage) * -100%);
+    transition: left;
+    transition-duration: 0.7s;
+    transition-timing-function: ease-out;
+}
+
+.page-container>div{
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.page-container>div>div{
+    margin: 10px;
+    width: clamp(300px,75vw,1000px);
+}
