@@ -5,6 +5,7 @@
 .main-compo{
     width: calc(100%);
     overflow-x: hidden;
+    overflow-y: hidden;
     z-index: -2;
 }
 .page-container{
@@ -20,12 +21,7 @@
 }
 
 .page-container>div{
+    width: 100%;
     display: flex;
     justify-content: center;
-    width: 100%;
-}
-
-.page-container>div>div{
-    margin: 10px;
-    width: clamp(300px,75vw,1000px);
 }
