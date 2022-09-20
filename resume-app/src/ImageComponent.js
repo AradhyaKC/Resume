@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/alt-text */
 import "./ImageComponent.css"
 import secondMountains from "./SecondMountains.avif";
-import tempImage from "./matej-rieciciar-SdDvoAvu384-unsplash-medium-cropped.jpg";
+// import tempImage from "./matej-rieciciar-SdDvoAvu384-unsplash-medium-cropped.jpg";
 
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
 
@@ -11,7 +11,8 @@ function ImageComponent(props){
     const [imageState,setImageState] = useState(()=>{
         var state ={
             isImageActive:true, imageSlideClass:"",inactiveImgAnim:"",// both bgm and imag will use the same bool for active;   
-            prevbgmClass:"", currentbgmClass:"", swipedLeft:false, prevChildren:undefined,currentChildren:undefined
+            prevbgmClass:"", currentbgmClass:"", swipedLeft:undefined, prevChildren:undefined,currentChildren:undefined, 
+            activebgmSrc:undefined, inactivebgmSrc:undefined, activeStickybgm:undefined,
         };
         state.currentChildren=props.children;
         return state;
@@ -20,7 +21,8 @@ function ImageComponent(props){
 
     useEffect(()=>{
         SwipedLeft(props.swipedLeft);
-    },[props.children, props.swipedLeft, props.backgroundClass]);
+        // console.log("useEffect Called");
+    },[props.children, props.swipedLeft, props.backgroundClass,props.backgroundImg, props.stickyImg]);
     
     const SwipedLeft=(swipedLeft)=>{
         setImageState((prevState)=>{
@@ -28,24 +30,37 @@ function ImageComponent(props){
             newState.prevChildren=prevState.currentChildren;
             newState.currentChildren=props.children;
             newState.isImageActive=!prevState.isImageActive;
+
+            newState.inactivebgmSrc=newState.activebgmSrc;
+            newState.activebgmSrc=props.backgroundImg;
+            newState.activeStickybgm=props.stickyImg;
             
             newState.prevbgmClass=newState.currentbgmClass;
             newState.currentbgmClass=props.backgroundClass;
             newState.imageSlideClass="img-fade-in-anim";
             newState.inactiveImgAnim="sticky-img-display-none";
 
-            if(swipedLeft!=""  && typeof swipedLeft =='boolean'){
+            if(newState.swipedLeft==undefined){
+                console.log("ran");
+                newState.swipedLeft ="null";return newState;
+            }
+            if(newState.swipedLeft=='null'){
+                console.log("ran null ");
+                newState.swipedLeft =swipedLeft;return newState;
+            }
+            if(swipedLeft!=undefined){
                 newState.swipedLeft=swipedLeft;
                 if(newState.swipedLeft){
                     newState.imageSlideClass ="image-right-slide-in";
                     newState.inactiveImgAnim="img-fade-out-anim";
                 }else{
                     newState.imageSlideClass="image-left-slide-in";
-                    newState.inactiveImgAnim="img=fade-out-anim";
+                    newState.inactiveImgAnim="img-fade-out-anim";
                 }
             }
             return newState;
         });
+        stickyRef.current.setActiveImageUrlAndSwipe(imageState.activeStickybgm,swipedLeft);
     } 
 
     
@@ -55,21 +70,22 @@ function ImageComponent(props){
             <div className={"bgm-1 " + (!imageState.isImageActive?"bgm-fade-in " +imageState.currentbgmClass:
             " bgm-fade-out " +imageState.prevbgmClass)}></div>
             <div className={"image " +(imageState.isImageActive?imageState.imageSlideClass:imageState.inactiveImgAnim) }>
-                <img src={secondMountains}/>   
+                <img src={imageState.isImageActive?imageState.activebgmSrc:imageState.inactivebgmSrc}/>   
                 <div className="children-container">
                     {imageState.isImageActive && imageState.currentChildren}    
                     {!imageState.isImageActive && imageState.prevChildren}
                 </div>
             </div>
             <div className={"image-1 " + (!imageState.isImageActive?imageState.imageSlideClass:imageState.inactiveImgAnim)}>
-                <img src={tempImage}/> 
+                <img src={!imageState.isImageActive?imageState.activebgmSrc:imageState.inactivebgmSrc}/> 
                 <div className="children-container">
                     {!imageState.isImageActive && imageState.currentChildren}
                     {imageState.isImageActive && imageState.prevChildren}
                 </div>               
             </div>
             <button onClick={()=>{ SwipedLeft(true);
-                stickyRef.current.setActiveImageUrlAndSwipe(tempImage,true)}}> Next </button>
+                // stickyRef.current.setActiveImageUrlAndSwipe(tempImage,true);
+                }}> Next </button>
             <StickyImageComponent ref={stickyRef}/>
         </header>
     );
