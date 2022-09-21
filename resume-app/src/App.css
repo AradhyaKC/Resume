@@ -1,3 +1,5 @@
+@import url("https://cdn.jsdelivr.net/gh/devicons/devicon@v2.15.1/devicon.min.css");
+
 .App{
   display: flex;
   flex-direction: column;
@@ -19,5 +21,81 @@
   background:linear-gradient(0deg,rgb(43, 43, 43),gray) !important;
 }
 .orange-mountains{
-  background:linear-gradient(0deg,gray,gainsboro) !important;
+  background:linear-gradient(0deg,rgb(10, 0, 95),rgb(82, 0, 107)) !important;
+}
+
+.dim-background{
+  background:
+  /* linear-gradient(0deg, rgba(0, 0, 0, 0.1), rgba(255, 255, 255, 0),rgba(0, 0, 0, 0.1)), */
+  /* linear-gradient(217deg, rgba(255,0,0,1), rgba(255,0,0,0) 70.71%),
+            linear-gradient(127deg, rgba(0,255,0,1), rgba(0,255,0,0) 50.71%),
+            linear-gradient(336deg, rgba(0,0,255,1), rgba(0,0,255,0) 100.71%),white; */
+            linear-gradient(109.6deg, rgb(9, 9, 121) 11.2%, rgb(144, 6, 161) 53.7%, rgb(0, 212, 255) 100.2%); 
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: black;
+}
+.dim-background>div{
+  text-align: center;
+}
+
+.center{
+  display: flex;
+  justify-content: center;
+}
+
+.about-me{
+  width: 100%;
+  height: min-content;
+  background-color: gray;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.about-text{
+  font-size: 1.3rem;
+}
+.heading{
+  font-size: 2rem;
+}
+
+.skills-container{
+  /* width: clamp(200px,70vw,1200px); */
+  height: min-content;
+
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+.skill-img{
+  width: 125px;
+  height: 125px;
+  display: block;
+  font-size: 125px;
+  text-align: center;
+}
+
+@media screen and (max-width:900px) {
+  .skill-img{
+    width: 100px; height: 100px;
+  }
+}
+@media screen and (max-width:400px) {
+  .about-text{
+    font-size: 1rem;
+  }
+  .skill-img{
+    width: 75px;height:75px;
+  }
+  .heading{
+    font-size: 1.5rem;
+  }
 }

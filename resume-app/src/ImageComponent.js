@@ -57,10 +57,11 @@ function ImageComponent(props){
                     newState.imageSlideClass="image-left-slide-in";
                     newState.inactiveImgAnim="img-fade-out-anim";
                 }
+                
+                stickyRef.current.setActiveImageUrlAndSwipe(imageState.activeStickybgm,swipedLeft);
             }
             return newState;
         });
-        stickyRef.current.setActiveImageUrlAndSwipe(imageState.activeStickybgm,swipedLeft);
     } 
 
     
