@@ -22,28 +22,29 @@ function App() {
     });
   }
 
-  // function ImageData(props){
-  //   const [index,setIndex] =useState(0);
-  //   const ImageJSXAndData = [{
-  //     img:secondMount, backgroundClass:"dim-background", stickyImg:linearSticky,
-  //     jsx:<div> Hello World </div>
-  //   }];
-
-  //   return (ImageJSXAndData[0]);
-  // }
-
-  return (
-    <div className='App'>
-      <ImageComponent backgroundImg={(tempState==0?secondMount:orangeMount)} swipedLeft={tempState!=0}
-      backgroundClass={(tempState?"second-mountains":"orange-mountains")} stickyImg={tempState==0?linearSticky:stickyOrange}>
-        <div className='dim-background'>
+  function ImageData(props){
+    const [index,setIndex] =useState(0);
+    const ImageJSXAndData = [{
+      img:secondMount, backgroundClass:"orange-mountains", stickyImg:linearSticky,
+      jsx:
+      <div className='dim-background'>
           <div className='temp-container' style={{color:'white'}}>
             <div style={{fontSize:"1.5rem",fontWeight:'500'}}> Hi There !</div>
             <div style={{fontSize:"2.4rem",fontWeight:"700"}}>I'm Aradhya.</div>
             <div style={{fontSize:"1.6rem",fontWeight:"600"}}> An Aspiring web and game developer</div>
           </div>
         </div>
-      </ImageComponent>
+    }];
+
+    return (<ImageComponent backgroundImg={ImageJSXAndData[0].img} swipedLeft={props.swipedLeft}
+      backgroundClass={ImageJSXAndData[0].backgroundClass} stickyImg={ImageJSXAndData[0].stickyImg}>
+      {ImageJSXAndData[0].jsx}
+    </ImageComponent>);
+  }
+
+  return (
+    <div className='App'>
+      <ImageData index='0' swipedLeft={true}/>
       <NavComponent callOnElementClick ={Calltest}>
         <div>Hello World</div>
         <div>Hello World</div>

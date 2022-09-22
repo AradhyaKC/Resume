@@ -24,8 +24,8 @@ function ImageComponent(props){
         // console.log("useEffect Called");
     },[props.children, props.swipedLeft, props.backgroundClass,props.backgroundImg, props.stickyImg]);
     
-    const SwipedLeft=(swipedLeft)=>{
-        setImageState((prevState)=>{
+    const SwipedLeft=async(swipedLeft)=>{
+        await setImageState((prevState)=>{
             var newState = {...prevState};
             newState.prevChildren=prevState.currentChildren;
             newState.currentChildren=props.children;
@@ -34,34 +34,34 @@ function ImageComponent(props){
             newState.inactivebgmSrc=newState.activebgmSrc;
             newState.activebgmSrc=props.backgroundImg;
             newState.activeStickybgm=props.stickyImg;
+            // console.log(newState.activeStickybgm);
             
             newState.prevbgmClass=newState.currentbgmClass;
             newState.currentbgmClass=props.backgroundClass;
             newState.imageSlideClass="img-fade-in-anim";
             newState.inactiveImgAnim="sticky-img-display-none";
 
-            if(newState.swipedLeft==undefined){
-                console.log("ran");
-                newState.swipedLeft ="null";return newState;
-            }
-            if(newState.swipedLeft=='null'){
-                console.log("ran null ");
-                newState.swipedLeft =swipedLeft;return newState;
-            }
-            if(swipedLeft!=undefined){
-                newState.swipedLeft=swipedLeft;
-                if(newState.swipedLeft){
-                    newState.imageSlideClass ="image-right-slide-in";
-                    newState.inactiveImgAnim="img-fade-out-anim";
-                }else{
-                    newState.imageSlideClass="image-left-slide-in";
-                    newState.inactiveImgAnim="img-fade-out-anim";
-                }
-                
-                stickyRef.current.setActiveImageUrlAndSwipe(imageState.activeStickybgm,swipedLeft);
-            }
+            // if(newState.swipedLeft==undefined){
+            //     console.log("ran");
+            //     newState.swipedLeft ="null";return newState;
+            // }
+            // // if(newState.swipedLeft=='null'){
+            // //     console.log("ran null ");
+            // //     newState.swipedLeft =swipedLeft;return newState;
+            // // }
+            newState.swipedLeft=swipedLeft;
+            console.log("ran sticky" + newState.activeStickybgm);
+
+            if(newState.swipedLeft){
+                newState.imageSlideClass ="image-right-slide-in";
+                newState.inactiveImgAnim="img-fade-out-anim";
+            }else{
+                newState.imageSlideClass="image-left-slide-in";
+                newState.inactiveImgAnim="img-fade-out-anim";
+            } 
             return newState;
         });
+
     } 
 
     
@@ -84,10 +84,7 @@ function ImageComponent(props){
                     {imageState.isImageActive && imageState.prevChildren}
                 </div>               
             </div>
-            <button onClick={()=>{ SwipedLeft(true);
-                // stickyRef.current.setActiveImageUrlAndSwipe(tempImage,true);
-                }}> Next </button>
-            <StickyImageComponent ref={stickyRef}/>
+            <StickyImageComponent stickyImg={imageState.activeStickybgm} swipedLeft={imageState.swipedLeft} ref={stickyRef}/>
         </header>
     );
 }
@@ -103,14 +100,20 @@ const StickyImageComponent= forwardRef((props,ref)=>{
         return {setActiveImageUrlAndSwipe};
     });
 
-    const setActiveImageUrlAndSwipe=(urlString,swipedLeft)=>{
-        setStickyState((prevState)=>{
+    useEffect(()=>{
+        setActiveImageUrlAndSwipe(props.stickyImg,props.swipedLeft);
+    },[props.swipedLeft, props.stickyImg])
+
+    const setActiveImageUrlAndSwipe=async(urlString,swipedLeft)=>{
+        await setStickyState((prevState)=>{
             var newState = {...prevState};
             newState.inactiveImgUrl=newState.activeImgUrl;
             newState.activeImgUrl=urlString;
+            // console.log(newState.activeImgUrl);
             return newState;
         });
         handleSwipe(swipedLeft);
+        handleScroll();
     }
 
     const handleScroll=() => {
@@ -187,12 +190,13 @@ const StickyImageComponent= forwardRef((props,ref)=>{
                     width:'100%', height:`${stickyState.scrolled?'min-content':'100%'}`,display:`${(stickyState.scrolled)?"block":"none"}`,
                     position:`${stickyState.scrolled?"fixed":"absolute"}`,top:`${stickyState.scrolled?"0px":""}`
                 }}>
-                    <img className={"sticky-bar-img " + stickyState.stickyImgSlideClass} style={{
-                        content:`url(${stickyState.isStickyImgEnabled?stickyState.activeImgUrl:stickyState.inactiveImgUrl})`
-                    }}></img>
-                    <img className={"sticky-bar-img-1 " +stickyState.stickyImg1SlideClass}  style={{
-                        content:`url(${!stickyState.isStickyImgEnabled?stickyState.activeImgUrl:stickyState.inactiveImgUrl})`
-                    }}></img>
+                    <img className={"sticky-bar-img " + stickyState.stickyImgSlideClass}
+                    //  style={{
+                    //     content:`url(${stickyState.isStickyImgEnabled?stickyState.activeImgUrl:stickyState.inactiveImgUrl})`
+                    src={stickyState.isStickyImgEnabled?stickyState.activeImgUrl:stickyState.inactiveImgUrl}
+                    ></img>
+                    <img className={"sticky-bar-img-1 " +stickyState.stickyImg1SlideClass} 
+                    src={!stickyState.isStickyImgEnabled?stickyState.activeImgUrl:stickyState.inactiveImgUrl}></img>
                 </div>
         </div>
     );
