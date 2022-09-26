@@ -44,10 +44,10 @@ function App() {
 
   return (
     <div className='App'>
-      <ImageData index='0' swipedLeft={undefined}/>
+      <ImageData index='0' swipedLeft={true}/>
       <NavComponent callOnElementClick ={Calltest}>
         <div>Hello World</div>
-        <div>Hello World</div>
+        <div>Web Projects</div>
       </NavComponent>
       <MainComponent>
         <div index='0'  style={{marginTop:"20px" }}>
@@ -89,7 +89,13 @@ function App() {
         </div>  
 
         <div index='1'>
-          
+          <ProjectComponent index='1' ImgSrc={doggie}>
+            <h1>Hello World</h1>
+            <h1>Hello World</h1>
+            <h1>Hello World</h1>
+            <h1>Hello World</h1>
+            <h1>Hello World</h1>
+          </ProjectComponent>
         </div>
       </MainComponent>
     </div>
