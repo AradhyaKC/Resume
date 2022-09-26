@@ -44,7 +44,7 @@ function App() {
 
   return (
     <div className='App'>
-      <ImageData index='0' swipedLeft={true}/>
+      <ImageData index='0' swipedLeft={undefined}/>
       <NavComponent callOnElementClick ={Calltest}>
         <div>Hello World</div>
         <div>Hello World</div>
@@ -89,7 +89,7 @@ function App() {
         </div>  
 
         <div index='1'>
-
+          
         </div>
       </MainComponent>
     </div>

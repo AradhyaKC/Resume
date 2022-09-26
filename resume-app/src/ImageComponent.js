@@ -52,7 +52,9 @@ function ImageComponent(props){
             newState.swipedLeft=swipedLeft;
             console.log("ran sticky" + newState.activeStickybgm);
 
-            if(newState.swipedLeft){
+            if(newState.swipedLeft ==undefined) return newState;
+            
+            if(newState.swipedLeft!=undefined){
                 newState.imageSlideClass ="image-right-slide-in";
                 newState.inactiveImgAnim="img-fade-out-anim";
             }else{
