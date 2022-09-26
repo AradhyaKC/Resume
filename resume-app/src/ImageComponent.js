@@ -23,6 +23,12 @@ function ImageComponent(props){
         SwipedLeft(props.swipedLeft);
         // console.log("useEffect Called");
     },[props.children, props.swipedLeft, props.backgroundClass,props.backgroundImg, props.stickyImg]);
+
+    // useEffect(()=>{
+    //     setImageState((prevState)=>{
+
+    //     });
+    // },[props.children,props.backgroundClass,props.backgroundImg]);
     
     const SwipedLeft=async(swipedLeft)=>{
         await setImageState((prevState)=>{
@@ -53,8 +59,8 @@ function ImageComponent(props){
             console.log("ran sticky" + newState.activeStickybgm);
 
             if(newState.swipedLeft ==undefined) return newState;
-            
-            if(newState.swipedLeft!=undefined){
+
+            if(newState.swipedLeft){
                 newState.imageSlideClass ="image-right-slide-in";
                 newState.inactiveImgAnim="img-fade-out-anim";
             }else{

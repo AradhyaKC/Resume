@@ -4,7 +4,7 @@ import NavComponent from './NavComponent';
 import MainComponent from './MainComponent';
 import ProjectComponent from './ProjectComponent';
 import doggie from "./doggie.gif";
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import secondMount from "./SecondMountains.avif";
 import orangeMount from "./OrangeishMountains.jpg";
 import stickySecond from "./WhiteMountains-cropped.jpg";
@@ -15,17 +15,26 @@ import blankPerson from "./blankPerson.jpg";
 
 // still need to make ImageComponent usable on larger screens and also picture tag srcset; 
 function App() {
-  const [tempState,setTempState] = useState(0);
+  const [appState,setAppState] = useState(()=>{
+    return { currentIndex:0, swipedLeft:undefined, prevIndex:0};
+  });
   const Calltest = async (index)=>{
-    await setTempState((prevState)=>{
-      if(prevState==0) return 1; else return 0;
+    await setAppState((prevState)=>{
+      var newState = {...prevState};
+      if(prevState.currentIndex>index) newState.swipedLeft=false;
+      else newState.swipedLeft=true;
+      newState.prevIndex=newState.currentIndex;
+      newState.currentIndex=index;
+      return newState;
     });
   }
 
   function ImageData(props){
-    const [index,setIndex] =useState(0);
+    const [index,setIndex] =useState(()=>{
+      return props.prevIndex;
+    });
     const ImageJSXAndData = [{
-      img:secondMount, backgroundClass:"orange-mountains", stickyImg:linearSticky,
+      img:secondMount, backgroundClass:"orange-mountains", stickyImg:secondMount,
       jsx:
       <div className='dim-background'>
           <div className='temp-container' style={{color:'white'}}>
@@ -34,17 +43,29 @@ function App() {
             <div style={{fontSize:"1.6rem",fontWeight:"600"}}> An Aspiring web and game developer</div>
           </div>
         </div>
+    },{
+      img:secondMount, backgroundClass:"second-mountains", stickyImg:linearSticky,
+      jsx:
+      <div style={{fontSize:"3rem",color:'white'}}>
+        Web Projects
+      </div>
     }];
 
-    return (<ImageComponent backgroundImg={ImageJSXAndData[0].img} swipedLeft={props.swipedLeft}
-      backgroundClass={ImageJSXAndData[0].backgroundClass} stickyImg={ImageJSXAndData[0].stickyImg}>
-      {ImageJSXAndData[0].jsx}
-    </ImageComponent>);
+    useEffect(()=>{
+      setIndex(props.index);
+    },[props.index]);
+
+    return (
+    <ImageComponent backgroundImg={ImageJSXAndData[index].img} swipedLeft={props.swipedLeft}
+      backgroundClass={ImageJSXAndData[index].backgroundClass} stickyImg={ImageJSXAndData[index].stickyImg}>
+      {ImageJSXAndData[index].jsx}
+    </ImageComponent>
+    );
   }
 
   return (
     <div className='App'>
-      <ImageData index='0' swipedLeft={true}/>
+      <ImageData prevIndex={appState.prevIndex} index={appState.currentIndex} swipedLeft={appState.swipedLeft}/>
       <NavComponent callOnElementClick ={Calltest}>
         <div>Hello World</div>
         <div>Web Projects</div>
